@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Image Gallery</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;padding:20px;background:#fff;display:flex;justify-content:center}
+.grid{display:grid;gap:10px;max-width:900px}
+.row{display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:center}
+.style{font-size:14px;font-weight:700;color:#000}
+.images{display:flex;gap:8px}
+.images img{width:150px;cursor:pointer;transition:opacity .2s}
+.images img:hover{opacity:.8}
+.modal{display:none;position:fixed;z-index:999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.95);align-items:center;justify-content:center;cursor:pointer}
+.modal.show{display:flex}
+.modal img{max-width:95%;max-height:95%}
+</style>
+</head>
+<body>
+<div class="grid" id="gallery"></div>
+<div class="modal" id="modal" onclick="this.classList.remove('show')">
+<img id="modalImg" src="" alt="">
+</div>
+<script>
+const data={"ai_anime_generator": ["ai_anime_generator_01_00002_.png","ai_anime_generator_02_00002_.png","ai_anime_generator_03_00001_.png","ai_anime_generator_04_00001_.png"],"ai_art_generator": ["ai_art_generator_01_00002_.png","ai_art_generator_02_00002_.png","ai_art_generator_03_00002_.png","ai_art_generator_04_00001_.png"],"ai_background_generator": ["ai_background_generator_01_00002_.png","ai_background_generator_02_00002_.png","ai_background_generator_03_00002_.png","ai_background_generator_04_00001_.png"],"ai_book_cover_generator": ["ai_book_cover_generator_01_00002_.png","ai_book_cover_generator_02_00002_.png","ai_book_cover_generator_03_00002_.png","ai_book_cover_generator_04_00001_.png"],"ai_character_generator": ["ai_character_generator_01_00002_.png","ai_character_generator_02_00001_.png","ai_character_generator_03_00001_.png","ai_character_generator_04_00002_.png"],"ai_comic_book_generator": ["ai_comic_book_generator_01_00001_.png","ai_comic_book_generator_02_00002_.png","ai_comic_book_generator_03_00001_.png","ai_comic_book_generator_04_00002_.png"],"ai_drawing": ["ai_drawing_01_00001_.png","ai_drawing_02_00001_.png","ai_drawing_03_00001_.png","ai_drawing_04_00001_.png"],"ai_face_generator": ["ai_face_generator_01_00001_.png","ai_face_generator_02_00002_.png","ai_face_generator_03_00001_.png","ai_face_generator_04_00002_.png"],"ai_fashion_generator": ["ai_fashion_generator_01_00002_.png","ai_fashion_generator_02_00002_.png","ai_fashion_generator_03_00001_.png","ai_fashion_generator_04_00002_.png"],"ai_icon_generator": ["ai_icon_generator_01_00002_.png","ai_icon_generator_02_00001_.png","ai_icon_generator_03_00002_.png","ai_icon_generator_04_00002_.png"],"ai_illustration_generator": ["ai_illustration_generator_01_00001_.png","ai_illustration_generator_02_00001_.png","ai_illustration_generator_03_00001_.png","ai_illustration_generator_04_00002_.png"],"ai_image_generator": ["ai_image_generator_01_00002_.png","ai_image_generator_02_00001_.png","ai_image_generator_03_00001_.png","ai_image_generator_04_00001_.png"],"ai_interior_design_generator": ["ai_interior_design_generator_01_00001_.png","ai_interior_design_generator_02_00001_.png","ai_interior_design_generator_03_00001_.png","ai_interior_design_generator_04_00001_.png"],"ai_landscape_generator": ["ai_landscape_generator_01_00002_.png","ai_landscape_generator_02_00001_.png","ai_landscape_generator_03_00001_.png","ai_landscape_generator_04_00001_.png"],"ai_logo_generator": ["ai_logo_generator_01_00001_.png","ai_logo_generator_02_00002_.png","ai_logo_generator_03_00002_.png","ai_logo_generator_04_00001_.png"],"ai_manga_generator": ["ai_manga_generator_01_00001_.png","ai_manga_generator_02_00001_.png","ai_manga_generator_03_00001_.png","ai_manga_generator_04_00001_.png"],"ai_outfit_generator": ["ai_outfit_generator_01_00001_.png","ai_outfit_generator_02_00001_.png","ai_outfit_generator_03_00001_.png","ai_outfit_generator_04_00001_.png"],"ai_painting": ["ai_painting_01_00001_.png","ai_painting_02_00001_.png","ai_painting_03_00001_.png","ai_painting_04_00001_.png"],"ai_pattern_generator": ["ai_pattern_generator_01_00001_.png","ai_pattern_generator_02_00001_.png","ai_pattern_generator_03_00002_.png","ai_pattern_generator_04_00002_.png"],"ai_photo_generator": ["ai_photo_generator_01_00001_.png","ai_photo_generator_02_00002_.png","ai_photo_generator_03_00002_.png","ai_photo_generator_04_00002_.png"],"ai_sketch_generator": ["ai_sketch_generator_01_00002_.png","ai_sketch_generator_02_00002_.png","ai_sketch_generator_03_00002_.png","ai_sketch_generator_04_00001_.png"],"ai_tattoo_generator": ["ai_tattoo_generator_01_00001_.png","ai_tattoo_generator_02_00002_.png","ai_tattoo_generator_03_00001_.png","ai_tattoo_generator_04_00002_.png"],"album_cover_generator": ["album_cover_generator_01_00002_.png","album_cover_generator_02_00002_.png","album_cover_generator_03_00002_.png","album_cover_generator_04_00001_.png"],"animated_characters_generator": ["animated_characters_generator_01_00001_.png","animated_characters_generator_02_00001_.png","animated_characters_generator_03_00001_.png","animated_characters_generator_04_00001_.png"],"architecture_generator": ["architecture_generator_01_00002_.png","architecture_generator_02_00002_.png","architecture_generator_03_00001_.png","architecture_generator_04_00002_.png"],"dark_fantasy_ai": ["dark_fantasy_ai_01_00002_.png","dark_fantasy_ai_02_00001_.png","dark_fantasy_ai_03_00001_.png","dark_fantasy_ai_04_00002_.png"],"disney_ai_generator": ["disney_ai_generator_01_00001_.png","disney_ai_generator_02_00002_.png","disney_ai_generator_03_00001_.png","disney_ai_generator_04_00001_.png"],"dnd_ai_art_generator": ["dnd_ai_art_generator_01_00002_.png","dnd_ai_art_generator_02_00001_.png","dnd_ai_art_generator_03_00001_.png","dnd_ai_art_generator_04_00001_.png"],"emoji_generator": ["emoji_generator_01_00001_.png","emoji_generator_02_00001_.png","emoji_generator_03_00001_.png","emoji_generator_04_00001_.png"],"fantasy_map_generator": ["fantasy_map_generator_01_00002_.png","fantasy_map_generator_02_00001_.png","fantasy_map_generator_03_00001_.png","fantasy_map_generator_04_00001_.png"],"graffiti_generator": ["graffiti_generator_01_00001_.png","graffiti_generator_02_00001_.png","graffiti_generator_03_00001_.png","graffiti_generator_04_00001_.png"],"movie_poster_generator": ["movie_poster_generator_01_00002_.png","movie_poster_generator_02_00002_.png","movie_poster_generator_03_00002_.png","movie_poster_generator_04_00001_.png"],"optical_illusion_generator": ["optical_illusion_generator_01_00001_.png","optical_illusion_generator_02_00001_.png","optical_illusion_generator_03_00001_.png","optical_illusion_generator_04_00001_.png"],"pokemon_generator_random": ["pokemon_generator_random_01_00001_.png","pokemon_generator_random_02_00001_.png","pokemon_generator_random_03_00001_.png","pokemon_generator_random_04_00001_.png"],"south_park_character_generator": ["south_park_character_generator_01_00001_.png","south_park_character_generator_02_00001_.png","south_park_character_generator_03_00001_.png","south_park_character_generator_04_00001_.png"],"superhero_generator": ["superhero_generator_01_00001_.png","superhero_generator_02_00002_.png","superhero_generator_03_00001_.png","superhero_generator_04_00001_.png"],"thumbnail_maker": ["thumbnail_maker_01_00001_.png","thumbnail_maker_02_00001_.png","thumbnail_maker_03_00001_.png","thumbnail_maker_04_00001_.png"]};
+const gallery=document.getElementById('gallery');
+const modal=document.getElementById('modal');
+const modalImg=document.getElementById('modalImg');
+Object.keys(data).forEach(folder=>{
+const row=document.createElement('div');
+row.className='row';
+const styleDiv=document.createElement('div');
+styleDiv.className='style';
+styleDiv.textContent=folder.replace(/_/g,' ');
+const imagesDiv=document.createElement('div');
+imagesDiv.className='images';
+data[folder].forEach(file=>{
+const imgEl=document.createElement('img');
+imgEl.src=`z-image/${folder}/${file}`;
+imgEl.alt=folder;
+imgEl.onclick=()=>{modalImg.src=imgEl.src;modal.classList.add('show')};
+imagesDiv.appendChild(imgEl);
+});
+row.appendChild(styleDiv);
+row.appendChild(imagesDiv);
+gallery.appendChild(row);
+});
+</script>
+</body>
+</html>
