@@ -31,7 +31,7 @@ body{font-family:Arial,sans-serif;padding:20px;background:#fff;display:flex;just
 <button class="active" onclick="switchVersion('v1')">Version 1</button>
 <button onclick="switchVersion('v2')">Version 2</button>
 </div>
-<div class="header">
+<div class="header" id="header" style="display:none">
 <div></div>
 <div class="header-labels">
 <span>Burger King</span>
@@ -78,9 +78,12 @@ function switchVersion(ver){
 currentVersion=ver;
 document.querySelectorAll('.buttons button').forEach(b=>b.classList.remove('active'));
 event.target.classList.add('active');
+const header=document.getElementById('header');
 if(ver==='v1'){
+header.style.display='none';
 render(data1,'z-image');
 }else{
+header.style.display='grid';
 render(data2,'z-image (2)');
 }
 }
